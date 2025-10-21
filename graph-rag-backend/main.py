@@ -153,36 +153,16 @@ async def list_documents():
 
 @app.delete("/api/documents/{document_id}")
 async def delete_document(document_id: str):
-    """
-    Delete a document and all its associated knowledge graph data
-    This removes entities, relationships, and vector embeddings
-    """
+    """Delete a document and its associated graph data"""
     from services.document_processor import DocumentProcessor
-    from services.graph_service import GraphService
     
     processor = DocumentProcessor()
-    graph_service = GraphService()
+    result = await processor.delete_document(document_id)
     
-    try:
-        # Delete document and get affected entities
-        deleted_data = await processor.delete_document(document_id)
-        
-        if not deleted_data:
-            raise HTTPException(status_code=404, detail="Document not found")
-        
-        # Clean up orphaned graph data if needed
-        cleanup_stats = await graph_service.cleanup_orphaned_data()
-        
-        return {
-            "status": "success", 
-            "message": f"Document {document_id} deleted",
-            "deleted_entities": deleted_data.get("entities_count", 0),
-            "deleted_relationships": deleted_data.get("relationships_count", 0),
-            "cleanup_stats": cleanup_stats
-        }
-        
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Delete failed: {str(e)}")
+    if not result:
+        raise HTTPException(status_code=404, detail=f"Document {document_id} not found")
+    
+    return result
 
 
 # ============================================================================

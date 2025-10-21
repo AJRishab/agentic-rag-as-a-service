@@ -13,8 +13,7 @@ const GraphRAGPlatform = () => {
   const [error, setError] = useState(null);
   const [deleting, setDeleting] = useState({});
 
-  // Use environment variable or fallback to localhost for development
-  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+  const API_BASE_URL = 'http://localhost:8000';
 
   // Check API health on mount
   useEffect(() => {

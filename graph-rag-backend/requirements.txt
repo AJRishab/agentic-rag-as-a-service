@@ -9,9 +9,9 @@ python-multipart==0.0.6
 neo4j==5.14.0
 
 # Vector Embeddings
-sentence-transformers==2.2.2
-torch==2.1.0
-numpy==1.24.3
+sentence-transformers>=2.2.2
+torch>=2.0.0
+numpy>=1.24.0
 
 # Document Processing
 PyPDF2==3.0.1
@@ -21,6 +21,7 @@ python-magic==0.4.27
 # LLM Integration
 requests==2.31.0
 openai==1.3.0  # Optional for OpenAI API
+groq==0.4.1  # Groq API for fast LLM inference
 
 # Data Processing
 pandas==2.1.3

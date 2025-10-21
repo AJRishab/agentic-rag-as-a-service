@@ -178,8 +178,19 @@ class InMemoryGraphDB(GraphDBInterface):
 
 class GraphService:
     """Main graph service with pluggable backend"""
+    _instance = None
+    _db = None
+    _vector_store = None
+    
+    def __new__(cls, db_type: str = None):
+        if cls._instance is None:
+            cls._instance = super(GraphService, cls).__new__(cls)
+        return cls._instance
     
     def __init__(self, db_type: str = None):
+        if self._db is not None:
+            return  # Already initialized
+            
         # Use config setting if not specified
         db_type = db_type or settings.GRAPH_DB_TYPE
         
@@ -191,11 +202,13 @@ class GraphService:
         else:
             self.db = InMemoryGraphDB()
         
-        self.vector_store = {}  # Simple dict-based vector store
+        GraphService._db = self.db
+        GraphService._vector_store = {}  # Simple dict-based vector store
+        self.vector_store = GraphService._vector_store
     
     async def get_stats(self) -> Dict[str, Any]:
         """Get comprehensive graph statistics"""
-        return await self.db.get_stats()
+        return await (self._db or self.db).get_stats()
     
     async def get_visualization_data(self, limit: int = 100) -> Dict[str, Any]:
         """Get graph data for visualization"""
@@ -311,6 +324,48 @@ class GraphService:
                     results.append(node)
         
         return results
+    
+    async def delete_document_data(self, document_id: str):
+        """Delete all graph data associated with a specific document"""
+        if isinstance(self.db, InMemoryGraphDB):
+            # Remove nodes with this document_id
+            nodes_to_remove = []
+            for node_id, node in self.db.nodes.items():
+                if node['properties'].get('document_id') == document_id:
+                    nodes_to_remove.append(node_id)
+            
+            for node_id in nodes_to_remove:
+                del self.db.nodes[node_id]
+            
+            # Remove relationships connected to deleted nodes
+            rels_to_remove = []
+            for i, rel in enumerate(self.db.relationships):
+                if rel['source'] in nodes_to_remove or rel['target'] in nodes_to_remove:
+                    rels_to_remove.append(i)
+            
+            for i in reversed(rels_to_remove):
+                del self.db.relationships[i]
+            
+            # Remove from vector store
+            vector_keys_to_remove = [k for k, v in self.vector_store.items() 
+                                   if v.get('metadata', {}).get('document_id') == document_id]
+            for key in vector_keys_to_remove:
+                del self.vector_store[key]
+    
+    async def cleanup_orphaned_data(self) -> Dict[str, int]:
+        """Clean up orphaned entities and relationships"""
+        cleaned_entities = 0
+        cleaned_relationships = 0
+        
+        if isinstance(self.db, InMemoryGraphDB):
+            # For this simple implementation, no cleanup needed
+            # In a real system, you might remove entities with no relationships
+            pass
+        
+        return {
+            'cleaned_entities': cleaned_entities,
+            'cleaned_relationships': cleaned_relationships
+        }
     
     async def reset(self):
         """Reset the entire graph"""

@@ -50,7 +50,7 @@ class GraphConstructor:
                 {
                     'name': entity_name,
                     'type': entity_type,
-                    'doc_id': doc_id,
+                    'document_id': doc_id,
                     **entity.get('attributes', {})
                 }
             )
@@ -73,7 +73,7 @@ class GraphConstructor:
                     'text': entity_name,
                     'metadata': {
                         'type': entity_type,
-                        'doc_id': doc_id
+                        'document_id': doc_id
                     }
                 }
             
@@ -109,7 +109,7 @@ class GraphConstructor:
                 'embedding': embedding,
                 'text': chunk,
                 'metadata': {
-                    'doc_id': doc_id,
+                    'document_id': doc_id,
                     'chunk_index': i
                 }
             }
