@@ -1,0 +1,138 @@
+╔═══════════════════════════════════════════════════════════════════════╗
+║           RENDER BACKEND DEPLOYMENT - QUICK REFERENCE                ║
+╚═══════════════════════════════════════════════════════════════════════╝
+
+📋 RENDER DEPLOYMENT CHECKLIST (3 minutes)
+
+Step 1: Sign Up (1 minute)
+  ✓ Go to https://render.com
+  ✓ Sign up with GitHub
+  ✓ Authorize access
+
+Step 2: Create Service (1 minute)
+  ✓ Dashboard → New + → Web Service
+  ✓ Connect GitHub repo
+  ✓ Select "graph-rag"
+
+Step 3: Configure (1 minute)
+  ✓ Name: graph-rag-backend
+  ✓ Branch: main
+  ✓ Root Directory: graph-rag-backend
+  ✓ Runtime: Python 3
+  ✓ Build: pip install -r requirements.txt
+  ✓ Start: uvicorn main:app --host 0.0.0.0 --port $PORT
+  ✓ Plan: Free
+  ✓ Add all environment variables (see RENDER_DEPLOYMENT.md)
+
+Step 4: Deploy (Click!)
+  ✓ Click "Create Web Service"
+  ✓ Wait for "Live" status (green)
+
+Step 5: Verify
+  ✓ Visit: https://graph-rag-backend-xxxxx.onrender.com/
+  ✓ Should return: {"status":"operational"}
+
+═══════════════════════════════════════════════════════════════════════
+
+🔑 CRITICAL ENVIRONMENT VARIABLES
+
+LLM_PROVIDER                 = groq
+GROQ_API_KEY                 = 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
+GROQ_MODEL                   = llama-3.1-8b-instant
+GRAPH_DB_TYPE                = neo4j
+NEO4J_URI                    = neo4j+s://4971d414.databases.neo4j.io
+NEO4J_USER                   = neo4j
+NEO4J_PASSWORD               = b2xQmYrUILZeXt-3tAw0b5-yM-e2U08NtDUF2LzvjQk
+
+(All other env vars listed in RENDER_DEPLOYMENT.md)
+
+═══════════════════════════════════════════════════════════════════════
+
+⚠️  COMMON MISTAKES TO AVOID
+
+✗ Forget to set Root Directory to "graph-rag-backend"
+✗ Use wrong service name
+✗ Paste environment variables into wrong fields
+✗ Forget the $PORT in start command
+✗ Use production plan instead of free
+✗ Miss typing a single character in API keys
+
+═══════════════════════════════════════════════════════════════════════
+
+✅ SUCCESS CHECKLIST
+
+After deployment:
+□ Service status shows "Live" (green button)
+□ URL is accessible: https://graph-rag-backend-xxxxx.onrender.com
+□ GET / returns {"status":"operational"}
+□ Logs show no errors
+□ All environment variables are set
+
+═══════════════════════════════════════════════════════════════════════
+
+📞 TROUBLESHOOTING QUICK FIXES
+
+Problem: Build fails
+Fix: Check Render Logs tab → find error → fix code → git push
+
+Problem: "Module not found"
+Fix: requirements.txt missing dependency → add it → git push
+
+Problem: API returns 500
+Fix: Wrong env var → check values exactly → update → trigger rebuild
+
+Problem: Can't connect to Neo4j
+Fix: Neo4j password wrong → update env var → trigger rebuild
+
+═══════════════════════════════════════════════════════════════════════
+
+🎯 WHAT YOU'LL GET
+
+✅ Deployed backend at: https://graph-rag-backend-xxxxx.onrender.com
+✅ Groq API integration working
+✅ Neo4j Aura connected
+✅ Document upload endpoint live
+✅ Query endpoint live
+✅ Graph visualization data available
+
+═══════════════════════════════════════════════════════════════════════
+
+📚 DOCUMENTATION FILES
+
+• RENDER_DEPLOYMENT.md - Full step-by-step guide (READ THIS FIRST)
+• RENDER_QUICK_REFERENCE.txt - This file
+• CLOUD_DEPLOYMENT.md - Full deployment guide
+• CLOUD_READY.md - Cloud architecture overview
+
+═══════════════════════════════════════════════════════════════════════
+
+🔗 IMPORTANT LINKS
+
+Render Dashboard: https://dashboard.render.com
+GitHub: https://github.com/YOUR_USERNAME/graph-rag
+Groq Console: https://console.groq.com
+Neo4j Aura: https://aura.neo4j.io
+
+═══════════════════════════════════════════════════════════════════════
+
+💡 TIPS
+
+• Free tier may sleep after 15 mins of inactivity (auto-wakes)
+• First request after sleep takes ~10 seconds
+• Builds are cached - rebuilds are faster
+• Log in to Render to view real-time logs
+• GitHub auto-triggers rebuilds on push
+
+═══════════════════════════════════════════════════════════════════════
+
+⏱️  TIMING
+
+Build time:        ~2-3 minutes
+Deployment time:   ~1 minute
+Total time:        ~3-4 minutes
+First request:     ~10 seconds (cold start)
+Subsequent:        <1 second
+
+═══════════════════════════════════════════════════════════════════════
+
+Ready? Go to https://dashboard.render.com and follow RENDER_DEPLOYMENT.md!
