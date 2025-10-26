@@ -1,360 +1,147 @@
-# Graph RAG Platform - Complete Stack
+# Graph RAG Platform
 
-A production-ready **Graph RAG (Retrieval-Augmented Generation)** platform with a modern React frontend and FastAPI backend, combining knowledge graphs, vector embeddings, and agentic reasoning for intelligent information retrieval.
+This repository contains a production-ready **Graph RAG (Retrieval-Augmented Generation)** platform. It features a modern React frontend and a powerful FastAPI backend, designed to combine knowledge graphs, vector embeddings, and agentic reasoning for intelligent information retrieval.
 
-## 🌟 Features
+## 🌟 Core Features
 
-### Backend (FastAPI)
-- **Automatic Knowledge Graph Construction**: LLM-powered ontology extraction
-- **Multi-Modal Retrieval**: Vector search, graph traversal, and logical filtering
-- **Agentic Orchestration**: AI agents with dynamic tool selection
-- **Entity Resolution**: Automatic deduplication and entity merging
-- **Pluggable Architecture**: Neo4j, AWS Neptune, and in-memory support
-- **Real-time Processing**: Streaming responses with reasoning chains
+- **Automatic Knowledge Graph Construction**: Ingests documents (PDF, DOCX, TXT) and uses an LLM to automatically extract entities and relationships, building a comprehensive knowledge graph.
+- **Multi-Modal Retrieval**: Leverages a combination of vector similarity search, graph traversal, and metadata filtering to find the most relevant information.
+- **Agentic Reasoning**: Employs a multi-agent system to analyze user queries, plan retrieval strategies, and synthesize clear, accurate answers from the retrieved data.
+- **Modern Tech Stack**: Built with FastAPI and React, containerized with Docker, and orchestrated with Docker Compose.
+- **Interactive UI**: A user-friendly interface to upload documents, explore the knowledge graph, and perform intelligent queries.
 
-### Frontend (React)
-- **Modern UI**: Dark theme with glass morphism effects
-- **Document Upload**: Drag-and-drop interface for PDF, DOCX, TXT
-- **Real-time Visualization**: Live processing pipeline and agent activity
-- **Knowledge Graph Explorer**: Interactive statistics and entity types
-- **Agentic Query Interface**: Natural language with reasoning display
-- **Responsive Design**: Mobile-friendly with smooth animations
+## 🛠️ Frameworks & Technologies
 
-## 🚀 Quick Start
+- **Backend**: Python, FastAPI
+- **Frontend**: JavaScript, React, Tailwind CSS
+- **Graph Database**: Neo4j (Community Edition)
+- **LLM Integration**: Ollama (for local LLMs like Llama 2)
+- **Vector Embeddings**: Sentence Transformers
+- **Containerization**: Docker, Docker Compose
+- **Development**: Makefile for streamlined commands
 
-### Option 1: Docker (Recommended)
+## 🚀 Getting Started
 
-```bash
-# Clone the repository
-git clone <your-repo-url>
-cd graph-rag
+Choose one of the following methods to get the platform running.
 
-# Start all services
-make docker-up
+### Option 1: With Docker & Make (Recommended)
 
-# Access the platform
-# Frontend: http://localhost:3000
-# Backend API: http://localhost:8000
-# Neo4j Browser: http://localhost:7474
-```
+This is the easiest and most reliable way to start the entire application stack.
 
-### Option 2: Local Development
+**Prerequisites:**
+- Docker and Docker Compose
+- `make` command
+- Git
 
-```bash
-# Complete setup
-make setup
+**Steps:**
 
-# Start development environment (both frontend and backend)
-make dev
+1.  **Clone the repository:**
+    ```bash
+    git clone <your-repo-url>
+    cd graph-rag
+    ```
 
-# Or start individually:
-make run-backend  # Backend on port 8000
-make run-frontend # Frontend on port 3000
-```
+2.  **Start all services:**
+    This single command builds the Docker images, starts all containers (backend, frontend, Neo4j, Ollama), and pulls the required LLM model.
+    ```bash
+    make docker-up
+    ```
+
+3.  **Access the platform:**
+    - **Frontend**: [http://localhost:3000](http://localhost:3000)
+    - **Backend API**: [http://localhost:8000](http://localhost:8000)
+    - **Neo4j Browser**: [http://localhost:7474](http://localhost:7474)
+
+### Option 2: Local Development with Make (No Docker)
+
+Use this method if you have `make` but prefer to run the services directly on your machine.
+
+**Prerequisites:**
+- Python 3.8+ and Node.js 16+
+- `make` command
+
+**Steps:**
+
+1.  **Install all dependencies:**
+    This command installs all backend (pip) and frontend (npm) dependencies.
+    ```bash
+    make setup
+    ```
+
+2.  **Start development servers:**
+    This starts both the backend and frontend servers concurrently.
+    ```bash
+    make dev
+    ```
+
+### Option 3: Manual Local Development (No Docker, No Make)
+
+Use this method if you do not have `make` installed.
+
+**Prerequisites:**
+- Python 3.8+ and Node.js 16+
+
+**Steps:**
+
+1.  **Install backend dependencies:**
+    ```bash
+    cd graph-rag-backend
+    pip install -r requirements.txt
+    cd ..
+    ```
+
+2.  **Install frontend dependencies:**
+    ```bash
+    cd graph-rag-frontend
+    npm install
+    cd ..
+    ```
+
+3.  **Run the backend server:**
+    In a new terminal window, run:
+    ```bash
+    cd graph-rag-backend
+    uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
+    ```
+
+4.  **Run the frontend server:**
+    In a separate terminal window, run:
+    ```bash
+    cd graph-rag-frontend
+    npm start
+    ```
+
+## ⚙️ Available Commands
+
+A `Makefile` in the root directory provides several useful commands for managing the project:
+
+- `make docker-up`: Start the complete application stack using Docker.
+- `make docker-down`: Stop all running Docker containers.
+- `make setup`: Install all project dependencies.
+- `make dev`: Start the frontend and backend for local development.
+- `make test`: Run the test suite for the backend.
+- `make lint`: Run the linter to check code quality.
+- `make format`: Format the code according to project standards.
 
 ## 📁 Project Structure
 
 ```
 graph-rag/
 │
-├── graph-rag-backend/          # FastAPI Backend
-│   ├── main.py                 # API server
-│   ├── config.py               # Configuration
-│   ├── services/               # Core services
-│   │   ├── document_processor.py
-│   │   ├── graph_constructor.py
-│   │   ├── graph_service.py
-│   │   ├── entity_resolver.py
-│   │   ├── ontology_manager.py
-│   │   ├── agentic_retrieval.py
-│   │   └── metrics_collector.py
-│   ├── tests/                  # Test suite
+├── graph-rag-backend/      # FastAPI Backend
+│   ├── services/           # Core logic for RAG pipeline
+│   ├── src/                # Main application source
+│   ├── tests/              # Backend test suite
+│   ├── Dockerfile
 │   └── requirements.txt
 │
-├── graph-rag-frontend/         # React Frontend
-│   ├── src/
-│   │   ├── App.js              # Main application
-│   │   ├── index.js            # Entry point
-│   │   └── index.css           # Styles
-│   ├── public/                 # Static assets
-│   ├── package.json
-│   └── tailwind.config.js
+├── graph-rag-frontend/     # React Frontend
+│   ├── src/                # Main application source
+│   ├── public/
+│   ├── Dockerfile
+│   └── package.json
 │
-├── docker-compose.full.yml     # Full stack Docker
-├── Makefile                    # Development commands
-└── README.md
+├── docker-compose.full.yml # Docker Compose for the full stack
+├── Makefile                # Convenient development commands
+└── README.md               # This file
 ```
-
-## 🔧 Configuration
-
-### Backend Configuration
-
-Create `graph-rag-backend/.env`:
-
-```env
-# Graph Database
-GRAPH_DB_TYPE=neo4j
-NEO4J_URI=bolt://localhost:7687
-NEO4J_USER=neo4j
-NEO4J_PASSWORD=your_password
-
-# LLM Provider
-LLM_PROVIDER=ollama
-OLLAMA_ENDPOINT=http://localhost:11434/api/generate
-OLLAMA_MODEL=llama2
-
-# Optional: OpenAI
-OPENAI_API_KEY=your_key_here
-```
-
-### Frontend Configuration
-
-The frontend automatically connects to the backend at `http://localhost:8000`. To change this, edit `graph-rag-frontend/src/App.js` and update the `API_BASE_URL` constant.
-
-## 📚 Usage
-
-### 1. Upload Documents
-
-- Navigate to the "Document Upload" tab
-- Drag and drop or click to upload PDF, DOCX, or TXT files
-- Watch the real-time processing pipeline
-
-### 2. Explore Knowledge Graph
-
-- Switch to the "Knowledge Graph" tab
-- View entity statistics and types
-- See the visual graph representation
-
-### 3. Query with Agents
-
-- Go to the "Agentic Query" tab
-- Ask natural language questions
-- Watch the agent reasoning chain
-- See evidence sources and confidence scores
-
-## 🧪 Testing
-
-```bash
-# Run all tests
-make test
-
-# Backend tests only
-make test-backend
-
-# With coverage
-cd graph-rag-backend && pytest tests/ --cov=services --cov-report=html
-```
-
-## 🏗️ Development
-
-### Available Commands
-
-```bash
-make help              # Show all available commands
-make setup             # Complete setup
-make dev               # Start both frontend and backend
-make run-backend       # Backend only
-make run-frontend      # Frontend only
-make docker-up         # Start with Docker
-make test              # Run tests
-make lint              # Code linting
-make format            # Code formatting
-make clean             # Clean temporary files
-```
-
-### Adding Features
-
-1. **Backend**: Add new services in `graph-rag-backend/services/`
-2. **Frontend**: Create components in `graph-rag-frontend/src/components/`
-3. **API**: Extend endpoints in `graph-rag-backend/main.py`
-
-## 🔌 API Integration
-
-### Python SDK Example
-
-```python
-import requests
-
-# Upload document
-with open('document.pdf', 'rb') as f:
-    response = requests.post(
-        'http://localhost:8000/api/documents/upload',
-        files={'file': f}
-    )
-    doc_id = response.json()['document_id']
-
-# Query
-response = requests.post(
-    'http://localhost:8000/api/query',
-    json={'query': 'What are the main projects?'}
-)
-answer = response.json()['answer']
-```
-
-### JavaScript/React Example
-
-```javascript
-// Upload document
-const formData = new FormData();
-formData.append('file', file);
-
-const uploadResponse = await fetch('http://localhost:8000/api/documents/upload', {
-  method: 'POST',
-  body: formData
-});
-
-// Query
-const queryResponse = await fetch('http://localhost:8000/api/query', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ query: 'Your question here' })
-});
-```
-
-## 🐳 Docker Deployment
-
-### Production Deployment
-
-```bash
-# Build and start all services
-docker-compose -f docker-compose.full.yml up -d
-
-# Check status
-docker-compose -f docker-compose.full.yml ps
-
-# View logs
-docker-compose -f docker-compose.full.yml logs -f
-```
-
-### Individual Services
-
-```bash
-# Backend only
-cd graph-rag-backend && docker build -t graphrag-backend .
-docker run -p 8000:8000 graphrag-backend
-
-# Frontend only
-cd graph-rag-frontend && docker build -t graphrag-frontend .
-docker run -p 3000:3000 graphrag-frontend
-```
-
-## 📊 Performance
-
-### Benchmarks
-- **Document Processing**: 2-5 seconds per document
-- **Query Latency**: 300-800ms (depends on graph size)
-- **Concurrent Requests**: 100+ with proper resources
-- **Frontend Load Time**: <2 seconds
-
-### Optimization
-- Use Neo4j Enterprise for better performance
-- Enable GPU for Ollama (3-5x speedup)
-- Implement Redis caching for frequent queries
-- Use CDN for frontend assets
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-#### Backend Not Starting
-```bash
-# Check if port 8000 is available
-lsof -i :8000
-
-# Check Python dependencies
-cd graph-rag-backend && pip install -r requirements.txt
-```
-
-#### Frontend Not Connecting
-```bash
-# Verify backend is running
-curl http://localhost:8000/health
-
-# Check CORS settings in backend
-# Ensure API_BASE_URL is correct in frontend
-```
-
-#### Neo4j Connection Issues
-```bash
-# Check Neo4j status
-docker logs graphrag-neo4j
-
-# Verify connection
-curl http://localhost:7474
-```
-
-#### Out of Memory
-```bash
-# Increase Docker memory limit
-# Docker Desktop -> Settings -> Resources -> Memory (4GB+)
-
-# Or use in-memory mode
-export GRAPH_DB_TYPE=memory
-```
-
-## 🔐 Security
-
-### Production Recommendations
-1. **Authentication**: Implement JWT/OAuth2
-2. **Rate Limiting**: Redis-based throttling
-3. **HTTPS**: Use reverse proxy (Nginx)
-4. **Input Validation**: Sanitize all inputs
-5. **Secrets Management**: Environment variables + vault
-
-## 📈 Monitoring
-
-### Metrics Available
-- Query performance (latency, success rate)
-- Document processing stats
-- Graph size and growth
-- Agent execution times
-- System uptime
-
-### Access Metrics
-```bash
-curl http://localhost:8000/api/admin/metrics
-```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open Pull Request
-
-## 📄 License
-
-MIT License - see LICENSE file for details
-
-## 🆘 Support
-
-- **Documentation**: [Backend API Docs](http://localhost:8000/docs)
-- **Issues**: GitHub Issues
-- **Email**: support@example.com
-
-## 🗺️ Roadmap
-
-### Near-term (v1.1)
-- [ ] GraphQL API support
-- [ ] Advanced query caching
-- [ ] Batch document processing
-- [ ] Enhanced visualization
-
-### Mid-term (v1.5)
-- [ ] Multi-tenancy support
-- [ ] Real-time collaborative features
-- [ ] Advanced entity linking (Wikidata)
-- [ ] Query optimization engine
-
-### Long-term (v2.0)
-- [ ] Federated knowledge graphs
-- [ ] Automatic schema evolution
-- [ ] Multi-language support
-- [ ] Mobile SDKs
-
----
-
-**Built with ❤️ for the open-source community**
-
-Version 1.0.0 | Last Updated: October 18, 2025
