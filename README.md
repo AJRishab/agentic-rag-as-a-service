@@ -1,4 +1,4 @@
-#**(FRONTEND HOSTED ON VERCEL) LINK : https://agentic-rag-as-a-service.vercel.app/**
+# (FRONTEND HOSTED ON VERCEL) LINK : https://agentic-rag-as-a-service.vercel.app/
 
 # Graph RAG Platform
 
