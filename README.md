@@ -1,3 +1,5 @@
+FRONTEND HOST ON VERCEL LINK : https://agentic-rag-as-a-service.vercel.app/
+
 # Graph RAG Platform
 
 This repository contains a production-ready **Graph RAG (Retrieval-Augmented Generation)** platform. It features a modern React frontend and a powerful FastAPI backend, designed to combine knowledge graphs, vector embeddings, and agentic reasoning for intelligent information retrieval.
